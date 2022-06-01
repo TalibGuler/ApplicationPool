@@ -1,0 +1,34 @@
+﻿@model List<AppModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+    @foreach (var item in Model)
+    {
+        @*<div class="row">
+                <div class="card col-lg-4 mb-2" style="width: 18rem;">
+                    <img class="card-img-top" src="@item.Image" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <a asp-controller="@item.Path" asp-action="Index" class="btn btn-primary">Go App</a>
+                    </div>
+                </div>
+            </div>*@
+       
+            <div class="box">
+                <div class="content">
+                    <img src="@item.Image" alt="">
+                    <h2>
+                        @item.Name <br>
+                        <a asp-controller="@item.Path" asp-action="Index">Go App</a>
+                </div>
+            </div>
+  
+    }
+
+
+    @*Her sayfa için ayrı css render etmek için*@
+    @section Styles{ <link href="~/css/card.css" rel="stylesheet" /> }

@@ -11,12 +11,25 @@ namespace ApplicationPool.Controllers
     [Route("[controller]")]
     public class BmiController : Controller
     {
-        [HttpPost]
-        public IActionResult Index([FromBody]BmiModel model)
+        public IActionResult Index ()
         {
-            var response = CalculateBmi(model);
+            return View();
+        }
 
-            return Ok(response);
+        [HttpPost]
+        public IActionResult Calculate([FromBody]BmiModel model)
+        {
+            try
+            {
+                var response = CalculateBmi(model);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest("adasda");
+            }
+            
         }
         
         private Bmi CalculateBmi(BmiModel bmiModel)

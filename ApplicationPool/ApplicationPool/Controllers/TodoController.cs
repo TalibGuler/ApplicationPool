@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ApplicationPool.Contex;
+using ApplicationPool.Models.Response;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,40 @@ namespace ApplicationPool.Controllers
 {
     public class TodoController : Controller
     {
+        public ToDoContext context { get; set; }
+
+        public TodoController(ToDoContext toDoContext)
+        {
+            context = toDoContext;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var toDos = context.ToDos.ToList();
+
+            return View(toDos);
         }
+
+        [HttpPost]
+        [Route("api/todo")]
+        public IActionResult RequestTodo([FromBody] TodoRequestModel requestModel)
+        {
+            
+            var entry = context.ToDos.Add(new Models.ToDoModel { Name = requestModel.Name });
+            context.SaveChanges();
+            return Ok(entry.Entity);
+        }
+
+        [HttpDelete]
+        [Route("api/todo/{todoId}")]
+        public IActionResult DeleteTodo([FromRoute] int todoId)
+        {
+            var todo = context.ToDos.Find(todoId);
+            context.ToDos.Remove(todo);
+            context.SaveChanges();
+            return Ok();
+        }
+
+
     }
 }

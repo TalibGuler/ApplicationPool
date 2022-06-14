@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationPool.Repositories;
 
 namespace ApplicationPool
 {
@@ -27,6 +28,7 @@ namespace ApplicationPool
         {
             services.AddControllersWithViews();
             services.AddDbContext<ToDoContext>(opt=> { opt.UseNpgsql(Configuration.GetConnectionString("Postgres"));});
+            services.AddScoped<IToDoRepository, ToDoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

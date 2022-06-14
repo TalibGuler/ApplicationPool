@@ -116,6 +116,34 @@
                     todo.classList.toggle("completed");
                 }
             }
+            
+            async function updateCheck(e){
+              const id = e.target.parentElement.getAttribute("key");
+                const res = await fetch('https://localhost:5001/api/todo/' + id, {
+                method: 'UPDATE'
+                });
+                
+                 if (res.status != 200) {
+                                    return;
+                                }
+                                const item = e.target; //get the item we are clicking on
+                                //DELETE TODO
+                                if (item.classList[0] === "trash-btn") {
+                                    const todo = item.parentElement;
+                                    //animation
+                                    todo.classList.add("fall");
+                                    //delete when animation ends
+                                    todo.addEventListener("transitionend", function () {
+                                        todo.remove();
+                                    });
+                                }
+                
+                                //CHECK MARK
+                                if (item.classList[0] === "complete-btn") {
+                                    const todo = item.parentElement;
+                                    todo.classList.toggle("completed");
+                                }
+            }
 
 
         </script>

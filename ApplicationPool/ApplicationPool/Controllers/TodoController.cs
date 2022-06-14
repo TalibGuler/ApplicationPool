@@ -5,16 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationPool.Repositories;
 
 namespace ApplicationPool.Controllers
 {
     public class TodoController : Controller
     {
         public ToDoContext context { get; set; }
+        public IToDoRepository _ToDoRepository { get; set; }
 
-        public TodoController(ToDoContext toDoContext)
+        public TodoController(ToDoContext toDoContext, IToDoRepository toDoRepository)
         {
             context = toDoContext;
+            _ToDoRepository = toDoRepository;
         }
 
         public IActionResult Index()
@@ -29,9 +32,9 @@ namespace ApplicationPool.Controllers
         public IActionResult RequestTodo([FromBody] TodoRequestModel requestModel)
         {
             
-            var entry = context.ToDos.Add(new Models.ToDoModel { Name = requestModel.Name });
-            context.SaveChanges();
-            return Ok(entry.Entity);
+            //var entry = context.ToDos.Add(new Models.ToDoModel { Name = requestModel.Name });
+            //context.SaveChanges();
+            return Ok(_ToDoRepository.Create(requestModel));
         }
 
         [HttpDelete]
@@ -44,6 +47,14 @@ namespace ApplicationPool.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public IActionResult UpdateTodo([FromRoute] int todoId)
+        {
+            var todo = context.ToDos.Find(todoId);
+            context.ToDos.Update(todo);
+            context.SaveChanges();
+            return Ok();
+        }
 
     }
 }
